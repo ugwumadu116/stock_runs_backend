@@ -4,7 +4,8 @@ services:
     image: postgres
   web:
     build: .
-    command:  bash -c "python stockruns/manage.py makemigrations && python stockruns/manage.py migrate && python stockruns/manage.py runserver 0.0.0.0:8000"
+    command: python stockruns/manage.py runserver 0.0.0.0:8000
+   
     volumes:
       - ".:/app"
     ports:
