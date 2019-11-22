@@ -78,22 +78,26 @@ WSGI_APPLICATION = 'stockruns.wsgi.application'
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 import dj_database_url
+# import dotenv
 
-if "DATABASE_URL" in env:
-    DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'postgres',
-            'USER': 'postgres',
-            'PASSWORD': 'juninho1',
-            # 'HOST': 'DATABASE_URL', #for heroku pg
-            # 'HOST': 'db', # for docker postgres
-            'HOST': '', # for local pg
-            'PORT': '5432',
-        },
-    }
+
+DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
+
+# if "DATABASE_URL" in env:
+#     DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
+# else:
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.postgresql',
+#             'NAME': 'postgres',
+#             'USER': 'postgres',
+#             'PASSWORD': 'juninho1',
+#             # 'HOST': 'DATABASE_URL', #for heroku pg
+#             # 'HOST': 'db', # for docker postgres
+#             'HOST': '', # for local pg
+#             'PORT': '5432',
+#         },
+#     }
 
 
 # Password validation
