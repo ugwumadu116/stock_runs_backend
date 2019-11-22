@@ -1,50 +1,36 @@
-# Please remember to rename django_heroku to your project directory name
-FROM python:3.6-stretch
+FROM python:3.7-alpine
 
+
+RUN mkdir /app
 WORKDIR /app
-
-ENV PYTHONUNBUFFERED=1 \
-    PYTHONPATH=/app \
-    DJANGO_SETTINGS_MODULE=config.settings.production \
-    PORT=8000 \
-    WEB_CONCURRENCY=3
+# set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+ENV DEBUG 0
 
 EXPOSE 8000
 
-# Install operating system dependencies.
-RUN apt-get update -y && \
-    apt-get install -y apt-transport-https rsync gettext libgettextpo-dev && \
-    curl -sL https://deb.nodesource.com/setup_8.x | bash - && \
-    apt-get install -y nodejs &&\
-    rm -rf /var/lib/apt/lists/*
+# install psycopg2
+RUN apk update \
+    && apk add --virtual build-deps gcc python3-dev musl-dev \
+    && apk add postgresql-dev \
+    && pip install psycopg2 \
+    && apk del build-deps
 
-# start to compile front-end stuff
-WORKDIR django_heroku/static_src
-
-# Install front-end dependencies.
-COPY ./django_heroku/static_src/package.json ./django_heroku/static_src/package-lock.json ./
-RUN npm install
-
-# Compile static files
-COPY ./django_heroku/static_src/ ./
-RUN npm run build:prod
-
-# Install Gunicorn.
-RUN pip install "gunicorn>=19.8,<19.9"
-
-# start to install backend-end stuff
-WORKDIR /app
-
-# Install Python requirements.
-COPY requirements.txt .
+# install dependencies
+COPY ./requirements.txt .
 RUN pip install -r requirements.txt
 
-# Copy application code.
+# copy project
 COPY . .
 
 # Install assets
-# RUN python manage.py collectstatic --noinput --clear
+# RUN python stockruns/manage.py collectstatic --noinput --clear
 
-# Run application
-CMD gunicorn config.wsgi:application
+# add and run as non-root user
+# RUN adduser -D myuser
+# USER myuser
+
+# run gunicorn
+# CMD gunicorn stockruns.stockruns.wsgi:application --bind 0.0.0.0:$PORT
 
