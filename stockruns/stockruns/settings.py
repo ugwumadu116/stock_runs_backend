@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     # installed
     'rest_framework',
     'djmoney',
-    'stockruns.stocks'
+    'stocks'
 ]
 
 MIDDLEWARE = [
