@@ -1,1 +1,1 @@
-web: gunicorn stockruns.wsgi:application
+web: gunicorn stockruns/stockruns.wsgi:application
