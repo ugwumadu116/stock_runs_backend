@@ -1,11 +1,14 @@
 FROM python:3.7-alpine
 
+
 RUN mkdir /app
 WORKDIR /app
 # set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 ENV DEBUG 0
+
+EXPOSE 8000
 
 # install psycopg2
 RUN apk update \
@@ -21,18 +24,13 @@ RUN pip install -r requirements.txt
 # copy project
 COPY . .
 
-# RUN python stockruns/manage.py makemigrations
-# RUN python stockruns/manage.py migrate
-# python stockruns/manage.py runserver 0.0.0.0:8000
-# RUN python stockruns/manage.py loaddata stockruns/stocks/features/features.json
-# command: python stockruns/manage.py makemigrations && python stockruns/manage.py migrate && python stockruns/manage.py loaddata  stockruns/stocks/features/features.json && python stockruns/manage.py runserver 0.0.0.0:8000
-# COPY entrypoint.sh /entrypoint.sh
-
-RUN chmod +x /entrypoint.sh
+# Install assets
+# RUN python stockruns/manage.py collectstatic --noinput --clear
 
 # add and run as non-root user
-RUN adduser -D myuser
-USER myuser
+# RUN adduser -D myuser
+# USER myuser
 
 # run gunicorn
 CMD gunicorn stockruns.wsgi:application --bind 0.0.0.0:$PORT
+

@@ -25,7 +25,7 @@ SECRET_KEY = 'lioear+t2m)w8tqh3!#=9keq+ldz^4dpe5h*a4k*5c=@%-y@nw'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -77,17 +77,23 @@ WSGI_APPLICATION = 'stockruns.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'PASSWORD': 'juninho1',
-        'HOST': 'db',
-        # 'HOST': '',
-        'PORT': '5432',
-    },
-}
+import dj_database_url
+
+if "DATABASE_URL" in env:
+    DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'postgres',
+            'USER': 'postgres',
+            'PASSWORD': 'juninho1',
+            # 'HOST': 'DATABASE_URL', #for heroku pg
+            # 'HOST': 'db', # for docker postgres
+            'HOST': '', # for local pg
+            'PORT': '5432',
+        },
+    }
 
 
 # Password validation
