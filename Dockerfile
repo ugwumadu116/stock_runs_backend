@@ -32,6 +32,5 @@ COPY . .
 # USER myuser
 
 # run gunicorn
-CMD gunicorn stockruns.wsgi:application
-# CMD gunicorn stockruns.wsgi:application --bind 0.0.0.0:$PORT
+CMD gunicorn stockruns.wsgi:application --bind 0.0.0.0:$PORT
 
