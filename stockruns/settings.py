@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
-
+from decouple import config
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'lioear+t2m)w8tqh3!#=9keq+ldz^4dpe5h*a4k*5c=@%-y@nw'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', cast=bool)
 
 ALLOWED_HOSTS = ['*']
 
@@ -80,24 +80,39 @@ WSGI_APPLICATION = 'stockruns.wsgi.application'
 import dj_database_url
 # import dotenv
 
-DATABASES = {}
-DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
+# DATABASES = {}
+# DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
+# DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
 
-# if "DATABASE_URL" in env:
-#     DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
-# else:
-#     DATABASES = {
-#         'default': {
-#             'ENGINE': 'django.db.backends.postgresql',
-#             'NAME': 'postgres',
-#             'USER': 'postgres',
-#             'PASSWORD': 'juninho1',
-#             # 'HOST': 'DATABASE_URL', #for heroku pg
-#             # 'HOST': 'db', # for docker postgres
-#             'HOST': '', # for local pg
-#             'PORT': '5432',
-#         },
-#     }
+# # if "DATABASE_URL" in env:
+# #     DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
+# # else:
+# DATABASES = {
+#     'default': {
+#        'ENGINE': 'django.db.backends.postgresql',
+#        'NAME': 'postgres',
+#        'USER': 'postgres',
+#        'PASSWORD': 'juninho1',
+#        # 'HOST': 'DATABASE_URL', #for heroku pg
+#        # 'HOST': 'db', # for docker postgres
+#        'HOST': '', # for local pg
+#        'PORT': '5432',
+#     },
+# }
+
+if DEBUG == True:
+    DATABASES = {
+        'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASSWORD'),
+        'HOST': "",
+        'PORT': '5432',
+        }
+    }
+else:
+    DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
 
 
 # Password validation
