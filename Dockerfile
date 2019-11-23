@@ -25,12 +25,11 @@ RUN pip install -r requirements.txt
 COPY . .
 
 # Install assets
-# RUN python stockruns/manage.py collectstatic --noinput --clear
+RUN python manage.py collectstatic --noinput
 
 # add and run as non-root user
-# RUN adduser -D myuser
-# USER myuser
+RUN adduser -D myuser
+USER myuser
 
 # run gunicorn
-# CMD gunicorn stockruns.stockruns.wsgi:application --bind 0.0.0.0:$PORT
-
+CMD gunicorn stockruns.wsgi:application --bind 0.0.0.0:$PORT
