@@ -1,35 +1,17 @@
 FROM python:3.7-alpine
-
-
-RUN mkdir /app
-WORKDIR /app
-# set environment variables
-ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE 1
 ENV DEBUG 0
+RUN mkdir /api
+WORKDIR /api
+COPY requirements.txt /api/
+RUN \
+    python3 -m pip install -r requirements.txt python-decouple pymongo[srv] --no-cache-dir 
+COPY . /api/
 
-EXPOSE 8000
-
-# install psycopg2
-RUN apk update \
-    && apk add --virtual build-deps gcc python3-dev musl-dev \
-    && apk add postgresql-dev \
-    && pip install psycopg2 \
-    && apk del build-deps
-
-# install dependencies
-COPY ./requirements.txt .
-RUN pip install -r requirements.txt
-
-# copy project
-COPY . .
-
-# Install assets
 RUN python manage.py collectstatic --noinput
 
-# add and run as non-root user
 RUN adduser -D myuser
 USER myuser
 
-# run gunicorn
-CMD gunicorn stockruns.wsgi:application --bind 0.0.0.0:$PORT
+CMD gunicorn movierec.wsgi:application --bind 0.0.0.0:$PORT
