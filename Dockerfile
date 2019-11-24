@@ -8,4 +8,4 @@ RUN pip install -r requirements.txt
 
 # Run the app.  CMD is required to run on Heroku
 # $PORT is set by Heroku
-CMD python manage.py runserver 0.0.0.0:$PORT
+CMD python appx/manage.py runserver 0.0.0.0:$PORT
