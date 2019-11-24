@@ -5,18 +5,22 @@ python:
 services:
   - postgresql
 
-env:
-  - DJANGO=1.9.1
-
 install:
   - pip install -r requirements.txt
 
 before_script:
-  - psql -c "CREATE DATABASE hashtagbrews;" -U postgres
-  - psql -c "CREATE USER mee PASSWORD 'password';" -U postgres
-  - psql -c "ALTER USER mee CREATEDB;" -U postgres
+  - psql -c "CREATE USER postgres PASSWORD 'juninho1';" -U postgres
   - psql -c "GRANT ALL PRIVILEGES on DATABASE database to mee;" -U postgres
 
 script:
   - python manage.py migrate
   - python manage.py test
+
+deploy:
+  provider: heroku
+  api_key:
+    secure: 12354487-fe77-4d39-bf16-e1903e02a9fc
+  app: stocksrunsbackend
+  on:
+    repo: ugwumadu116/stock_runs_backend
+
