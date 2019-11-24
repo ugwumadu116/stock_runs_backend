@@ -80,39 +80,31 @@ WSGI_APPLICATION = 'stockruns.wsgi.application'
 import dj_database_url
 # import dotenv
 
-# DATABASES = {}
-# DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
-# DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
 
-# # if "DATABASE_URL" in env:
-# #     DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
-# # else:
-# DATABASES = {
-#     'default': {
-#        'ENGINE': 'django.db.backends.postgresql',
-#        'NAME': 'postgres',
-#        'USER': 'postgres',
-#        'PASSWORD': 'juninho1',
-#        # 'HOST': 'DATABASE_URL', #for heroku pg
-#        # 'HOST': 'db', # for docker postgres
-#        'HOST': '', # for local pg
-#        'PORT': '5432',
-#     },
-# }
 
-if DEBUG == True:
-    DATABASES = {
-        'default': {
+DATABASES = {
+    'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('DB_NAME'),
-        'USER': config('DB_USER'),
-        'PASSWORD': config('DB_PASSWORD'),
-        'HOST': "",
-        'PORT': '5432',
-        }
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'HOST': 'db',
+        'PORT': 5432,
     }
-else:
-    DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
+}
+
+# if DEBUG == True:
+#     DATABASES = {
+#         'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': config('DB_NAME'),
+#         'USER': config('DB_USER'),
+#         'PASSWORD': config('DB_PASSWORD'),
+#         'HOST': "",
+#         'PORT': '5432',
+#         }
+#     }
+# else:
+#     DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
 
 
 # Password validation
